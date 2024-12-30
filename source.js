@@ -2,6 +2,7 @@ let operand1 = null;
 let operand2 = null;
 let operator = null;
 let displayValue = "0";
+let isDecimal = false;
 const display = document.querySelector('#calc-display');
 const buttons = document.querySelectorAll('button');
 
@@ -19,22 +20,25 @@ function prepareBtns (){
         button.addEventListener('click', ()=> {
             if(button.classList.contains('operand')){
                 updateOperand(button.textContent);
-                console.log("operand")
+                
                 
             }else if (button.classList.contains('operator')){
-                console.log("operator")
+                
                 operate(button);
             }else if (button.classList.contains('clear')){
-                console.log("clear")
+                
                 clearDisplay();
                 
             }else if (button.classList.contains('equals')){
-                console.log("equals");
+                
                 if(canOperate()){
                     result();
                 }else{alert("Error: need an Operation.")};
             }else if (button.classList.contains('decimal')){
-                console.log("decimal")
+                
+                if(isDecimal === false){
+                    decimal();
+                }
             };
         });
     });
@@ -105,25 +109,27 @@ function clearDisplay(){
     operand1 = null;
     operand2 = null;
     operator = null;
+    isDecimal = false;
     updateDisplay();    
 }
 
 function add(x, y){
-    console.log("add")
     operand1 = x+y;
     operand2 = null;
     operator = null;
+    isDecimal = false;
     displayValue = `${operand1}`;
     updateDisplay();
+    verifyDecimal();
 };
 
 function subtract(x, y){
-    console.log("substract")
     operand1 = x-y;
     operand2 = null;
     operator = null;
     displayValue = `${operand1}`;
     updateDisplay();
+    verifyDecimal();
 };
 
 function multiply(x, y){
@@ -132,7 +138,7 @@ function multiply(x, y){
     operator = null;
     displayValue = `${operand1}`;
     updateDisplay();
-    console.log("multiply");
+    verifyDecimal();
 };
 
 function divide(x, y){
@@ -142,9 +148,24 @@ function divide(x, y){
         operator = null;
         displayValue = `${operand1}`;
         updateDisplay();
+        verifyDecimal();
     }else{
         alert("can't divide by 0.");
         return;
     }
-    console.log("divide");
+};
+
+function decimal(){
+    displayValue = displayValue.concat(".");
+    isDecimal = true;
+    updateDisplay();
+};
+
+function verifyDecimal (){
+    isDecimal = false;
+    for(let i = 0; i < displayValue.length; i++){
+        if(displayValue.charAt(i) === '.'){
+            isDecimal = true;
+        }
+    }
 };
